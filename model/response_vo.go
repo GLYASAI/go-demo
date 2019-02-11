@@ -20,10 +20,10 @@ package model
 
 // ResponseVO represents value object for all rest response
 type ResponseVO struct {
-	Success int `json:"success"`
-	Code    string
-	Msg     string
-	Data    interface{}
+	Success int         `json:"success"`
+	Code    string      `json:"code"`
+	Msg     string      `json:"msg"`
+	Data    interface{} `json:"data"`
 }
 
 // NewResponseVO returns a new response vo
