@@ -16,28 +16,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package usecase
+package model
 
-import "github.com/goodrain/go-demo/dbinfo"
-
-type dbinfoUsecase struct {
-	dbinfoRepo dbinfo.Repositorier
+// ResponseVO represents value object for all rest response
+type ResponseVO struct {
+	Success int `json:"success"`
+	Code    string
+	Msg     string
+	Data    interface{}
 }
 
-// NewDBInfoUsecase returns a dbinfo.Usecaser
-func NewDBInfoUsecase(dbinfoRepo dbinfo.Repositorier) dbinfo.Usecaser {
-	return &dbinfoUsecase{
-		dbinfoRepo: dbinfoRepo,
+// NewResponseVO returns a new response vo
+func NewResponseVO(success int, code string, msg string, data interface{}) ResponseVO {
+	return ResponseVO{
+		Success: success,
+		Code:    code,
+		Msg:     msg,
+		Data:    data,
 	}
-}
-
-// Ping verifies a connection to the database is still alive,
-// establishing a connection if necessary.
-func (d *dbinfoUsecase) Ping() (bool, error) {
-	return d.dbinfoRepo.Ping()
-}
-
-// ListTables lists tables
-func (d *dbinfoUsecase) ListTables() ([]string, error) {
-	return d.dbinfoRepo.ListTables()
 }

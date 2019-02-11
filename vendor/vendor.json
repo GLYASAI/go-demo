@@ -10,6 +10,12 @@
 			"revisionTime": "2019-01-09T08:30:14Z"
 		},
 		{
+			"checksumSHA1": "2jqR6NHYQL8L6w+ItjxQTHmyNAc=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "1b9eda25029c206f36637dde8e2acad26df99dab",
+			"revisionTime": "2019-01-27T01:11:11Z"
+		},
+		{
 			"path": "github.com/jinzhu/gorm",
 			"revision": ""
 		},

@@ -20,5 +20,6 @@ package dbinfo
 
 // Usecaser represent the dbinfo's usecases
 type Usecaser interface {
-	Ping() bool
+	Ping() (bool, error)
+	ListTables() ([]string, error)
 }

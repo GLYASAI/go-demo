@@ -20,6 +20,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/goodrain/go-demo/dbinfo"
 	"github.com/sirupsen/logrus"
 )
@@ -37,15 +38,73 @@ func NewMysqlDBInfoRepository(db *sql.DB) dbinfo.Repositorier {
 
 // Ping verifies a connection to the database is still alive,
 // establishing a connection if necessary.
-func (m *mysqlDBInfoRepo) Ping() bool {
-	if  m.DB == nil {
-		return false
+func (m *mysqlDBInfoRepo) Ping() (bool, error) {
+	if m.DB == nil {
+		return false, fmt.Errorf("*sql.DB is nil")
 	}
 
 	err := m.DB.Ping()
 	if err != nil {
 		logrus.Debugf("error pinging sql.DB: %v", err)
-		return false
+		return false, fmt.Errorf("error pinging sql.DB: %v", err)
 	}
-	return true
+	return true, nil
+}
+
+// ListTables lists tables
+func (m *mysqlDBInfoRepo) ListTables() ([]string, error) {
+	query := `show tables;`
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		logrus.Error(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Get column names
+	columns, err := rows.Columns()
+	if err != nil {
+		logrus.Errorf("error getting columns: %v", err)
+		return nil, err
+	}
+
+	// Make a slice for the values
+	values := make([]sql.RawBytes, len(columns))
+
+	// rows.Scan wants '[]interface{}' as an argument, so we must copy the
+	// references into such a slice
+	// See http://code.google.com/p/go-wiki/wiki/InterfaceSlice for details
+	scanArgs := make([]interface{}, len(values))
+	for i := range values {
+		scanArgs[i] = &values[i]
+	}
+
+	var result []string
+	// Fetch rows
+	for rows.Next() {
+		// get RawBytes from data
+		err = rows.Scan(scanArgs...)
+		if err != nil {
+			logrus.Errorf("error getting RawBytes from data: %v", err)
+		}
+
+		// Now do something with the data.
+		// Here we just print each column as a string.
+		var value string
+		for i, col := range values {
+			// Here we can check if the value is nil (NULL value)
+			if col == nil {
+				value = "NULL"
+			} else {
+				value = string(col)
+			}
+			logrus.Debugf("%s:%s\n", columns[i], value)
+			result = append(result, value)
+		}
+	}
+	if err = rows.Err(); err != nil {
+		logrus.Debugf("error listing tables: %v", err)
+		return nil, err
+	}
+	return result, nil
 }

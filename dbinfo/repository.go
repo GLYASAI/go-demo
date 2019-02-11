@@ -20,5 +20,6 @@ package dbinfo
 
 // Repositorier represent the dbinfo's repository contract
 type Repositorier interface {
-	Ping() bool
+	Ping() (bool, error)
+	ListTables() ([]string, error)
 }

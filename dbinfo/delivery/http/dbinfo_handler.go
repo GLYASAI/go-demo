@@ -20,6 +20,7 @@ package http
 
 import (
 	"github.com/goodrain/go-demo/dbinfo"
+	"github.com/goodrain/go-demo/model"
 	"github.com/labstack/echo"
 	"net/http"
 )
@@ -36,12 +37,24 @@ func NewDBInfoHTTPHandler(e *echo.Echo, dbinfoUcaser dbinfo.Usecaser) {
 	}
 	g := e.Group("/dbinfo")
 	g.GET("/ping", handler.Ping)
-
+	g.GET("/list-tables", handler.ListTables)
 }
 
 // Ping verifies a connection to the database is still alive,
 // establishing a connection if necessary.
 func (h *DBInfoHandler) Ping(c echo.Context) error {
-	result := h.DBInfoUcaser.Ping()
-	return c.JSON(http.StatusOK, result)
+	b, err := h.DBInfoUcaser.Ping()
+	if err != nil {
+		return c.JSON(http.StatusOK, model.NewResponseVO(1, "1001", err.Error(), b))
+	}
+	return c.JSON(http.StatusOK, model.NewResponseVO(0, "1000", "", b))
+}
+
+// ListTables lists tables
+func (h *DBInfoHandler) ListTables(c echo.Context) error {
+	tables, err := h.DBInfoUcaser.ListTables()
+	if err != nil {
+		return c.JSON(http.StatusOK, model.NewResponseVO(1, "2001", err.Error(), nil))
+	}
+	return c.JSON(http.StatusOK, model.NewResponseVO(0, "2000", "", tables))
 }
