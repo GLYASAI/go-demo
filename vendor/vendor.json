@@ -10,6 +10,10 @@
 			"revisionTime": "2019-01-09T08:30:14Z"
 		},
 		{
+			"path": "github.com/jinzhu/gorm",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "y2mv5OWDl8+NEjhlJOWuVzw6tzs=",
 			"path": "github.com/mattn/go-isatty",
 			"revision": "3fb116b820352b7f0c281308a4d6250c22d94e27",
@@ -23,8 +27,30 @@
 			"revisionTime": "2019-01-09T08:30:14Z"
 		},
 		{
+			"path": "github.com/sirupsen/logrus",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "jDsR9gpxYB6YBduE5qD8FmLiYv0=",
+			"path": "github.com/sirupsen/logrus/hooks/syslog",
+			"revision": "cdb2f3857cfba7388d28dfe38316b0a39e694215",
+			"revisionTime": "2019-02-10T13:00:17Z"
+		},
+		{
+			"checksumSHA1": "zt1WCAJyLKq610bOl7+09HjSKp4=",
+			"path": "github.com/sirupsen/logrus/internal/testutils",
+			"revision": "cdb2f3857cfba7388d28dfe38316b0a39e694215",
+			"revisionTime": "2019-02-10T13:00:17Z"
+		},
+		{
 			"checksumSHA1": "DbHdaqn3w9L5vzONX+lY405U6ec=",
 			"path": "github.com/stretchr/testify/assert",
+			"revision": "363ebb24d041ccea8068222281c2e963e997b9dc",
+			"revisionTime": "2019-01-09T08:30:14Z"
+		},
+		{
+			"checksumSHA1": "ZGs4vA+UZ880IKyl8CRkeKdhWdg=",
+			"path": "github.com/stretchr/testify/require",
 			"revision": "363ebb24d041ccea8068222281c2e963e997b9dc",
 			"revisionTime": "2019-01-09T08:30:14Z"
 		},
