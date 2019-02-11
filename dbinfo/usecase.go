@@ -16,30 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package repository
+package dbinfo
 
-import (
-	"database/sql"
-	"github.com/goodrain/go-demo/dbinfo"
-	"github.com/sirupsen/logrus"
-)
-
-type mysqlDBInfoRepo struct {
-	DB *sql.DB
-}
-
-// NewMysqlDBInfoRepository will create an implementation of author.Repositorier
-func NewMysqlDBInfoRepository(db *sql.DB) dbinfo.Repositorier {
-	return &mysqlDBInfoRepo{
-		DB: db,
-	}
-}
-
-func (m *mysqlDBInfoRepo) Ping() bool {
-	err := m.DB.Ping()
-	if err != nil {
-		logrus.Debugf("error pinging sql.DB: %v", err)
-		return false
-	}
-	return true
+// Usecaser represent the dbinfo's usecases
+type Usecaser interface {
+	Ping() bool
 }

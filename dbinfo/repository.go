@@ -18,6 +18,7 @@
 
 package dbinfo
 
-// Repository represent the dbinfo's repository contract
-type Repository interface {
+// Repositorier represent the dbinfo's repository contract
+type Repositorier interface {
+	Ping() bool
 }
