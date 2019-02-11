@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	dbinfo_http "github.com/goodrain/go-demo/dbinfo/delivery/http"
 	dbinfo_repo "github.com/goodrain/go-demo/dbinfo/repository"
+	dbinfo_ucase "github.com/goodrain/go-demo/dbinfo/usecase"
 	"github.com/goodrain/go-demo/middleware"
 	"github.com/labstack/echo"
 	"net/url"
@@ -25,7 +27,7 @@ func main() {
 	dbconn, _ := sql.Open(`mysql`, dsn)
 	defer dbconn.Close()
 
-	_ = dbinfo_repo.NewMysqlDBInfoRepository(dbconn)
+	dbinfoRepo := dbinfo_repo.NewMysqlDBInfoRepository(dbconn)
 
 	e := echo.New()
 
@@ -33,6 +35,9 @@ func main() {
 	e.Use(middL.CORS)
 
 	e.Static("/", "public")
+
+	dbinfoUcaser := dbinfo_ucase.NewDBInfoUsecase(dbinfoRepo)
+	dbinfo_http.NewDBInfoHTTPHandler(e, dbinfoUcaser)
 
 	e.Logger.Fatal(e.Start(":5000"))
 }

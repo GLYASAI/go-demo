@@ -35,7 +35,13 @@ func NewMysqlDBInfoRepository(db *sql.DB) dbinfo.Repositorier {
 	}
 }
 
+// Ping verifies a connection to the database is still alive,
+// establishing a connection if necessary.
 func (m *mysqlDBInfoRepo) Ping() bool {
+	if  m.DB == nil {
+		return false
+	}
+
 	err := m.DB.Ping()
 	if err != nil {
 		logrus.Debugf("error pinging sql.DB: %v", err)

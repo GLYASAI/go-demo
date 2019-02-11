@@ -16,23 +16,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package usecase
+package http
 
-import "github.com/goodrain/go-demo/dbinfo"
+import (
+	"github.com/goodrain/go-demo/dbinfo"
+	"github.com/labstack/echo"
+	"net/http"
+)
 
-type dbinfoUsecase struct {
-	dbinfoRepo dbinfo.Repositorier
+// DBInfoHandler  represents the http handler for dbinfo
+type DBInfoHandler struct {
+	DBInfoUcaser dbinfo.Usecaser
 }
 
-// NewDBInfoUsecase returns a dbinfo.Usecaser
-func NewDBInfoUsecase(dbinfoRepo dbinfo.Repositorier) dbinfo.Usecaser {
-	return &dbinfoUsecase{
-		dbinfoRepo: dbinfoRepo,
+// NewDBInfoHTTPHandler creates a DBInfoHandler and sets up Echo’s router
+func NewDBInfoHTTPHandler(e *echo.Echo, dbinfoUcaser dbinfo.Usecaser) {
+	handler := &DBInfoHandler{
+		DBInfoUcaser: dbinfoUcaser,
 	}
+	g := e.Group("/dbinfo")
+	g.GET("/ping", handler.Ping)
+
 }
 
 // Ping verifies a connection to the database is still alive,
 // establishing a connection if necessary.
-func (d *dbinfoUsecase) Ping() bool {
-	return d.dbinfoRepo.Ping()
+func (h *DBInfoHandler) Ping(c echo.Context) error {
+	result := h.DBInfoUcaser.Ping()
+	return c.JSON(http.StatusOK, result)
 }
