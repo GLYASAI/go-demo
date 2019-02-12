@@ -41,10 +41,9 @@ func NewProxyHandler(e *echo.Echo, proxyUcaser proxy.Usecaser) {
 }
 
 type ProxyInfo struct {
-	ProxyMethod string `json:"proxy_method"`
-	ProxyScheme string `json:"proxy_scheme"`
-	ProxyHost   string `json:"proxy_host"`
-	ProxyURI    string `json:"proxy_uri"`
+	ProxyMethod string      `json:"proxy_method"`
+	ProxyURL    string      `json:"proxy_url"`
+	Data        interface{} `json:"data"`
 }
 
 func (p *ProxyHandler) Proxy(c echo.Context) error {
@@ -66,10 +65,8 @@ func (p *ProxyHandler) Proxy(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,
 			fmt.Errorf("error binding the request body into ProxyInfo: %v", err))
 	}
-	// create a new url from the raw RequestURI sent by the client
-	url := fmt.Sprintf("%s://%s%s", pi.ProxyScheme, pi.ProxyHost, pi.ProxyURI)
 
-	proxyReq, err := http.NewRequest(pi.ProxyMethod, url, bytes.NewReader(body))
+	proxyReq, err := http.NewRequest(pi.ProxyMethod, pi.ProxyURL, bytes.NewReader(body))
 
 	// We may want to filter some headers, otherwise we could just use a shallow copy
 	// proxyReq.Header = req.Header
@@ -80,7 +77,9 @@ func (p *ProxyHandler) Proxy(c echo.Context) error {
 
 	httpCli := http.Client{}
 	resp, err := httpCli.Do(proxyReq)
-	defer resp.Body.Close()
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	if err != nil {
 		logrus.Errorf("error doing http proxy: %v", err)
 		return c.JSON(http.StatusBadGateway, fmt.Sprintf("error doing http proxy: %v", err))
@@ -91,5 +90,5 @@ func (p *ProxyHandler) Proxy(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, fmt.Errorf("error reading data from response body"))
 	}
 
-	return c.JSON(http.StatusOK, string(b))
+	return c.String(http.StatusOK, string(b))
 }
