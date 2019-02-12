@@ -27,6 +27,8 @@
 [metadata.heroku]
   root-package = "github.com/goodrain/go-demo"
   go-version = "go1.11"
+  install = [ "./..." ]
+  ensure = "false"
 
 [[constraint]]
   name = "github.com/go-sql-driver/mysql"
