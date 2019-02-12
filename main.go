@@ -18,7 +18,7 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 
 	dbuser := os.Getenv("MYSQL_USER")
-	dbpw := os.Getenv("MYSQL_PASSWORD")
+	dbpw := os.Getenv("MYSQL_PASS")
 	dbhost := os.Getenv("MYSQL_HOST")
 	dbport := os.Getenv("MYSQL_PORT")
 	dbname := os.Getenv("MYSQL_DATABASE")
