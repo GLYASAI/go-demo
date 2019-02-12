@@ -8,6 +8,7 @@ import (
 	dbinfo_repo "github.com/goodrain/go-demo/dbinfo/repository"
 	dbinfo_ucase "github.com/goodrain/go-demo/dbinfo/usecase"
 	"github.com/goodrain/go-demo/middleware"
+	"github.com/goodrain/go-demo/proxy/delivery/handler"
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
 	"net/url"
@@ -45,6 +46,7 @@ func main() {
 
 	dbinfoUcaser := dbinfo_ucase.NewDBInfoUsecase(dbinfoRepo)
 	dbinfo_http.NewDBInfoHTTPHandler(e, dbinfoUcaser)
+	handler.NewProxyHandler(e,nil)
 
 	e.Logger.Fatal(e.Start(":5000"))
 }
