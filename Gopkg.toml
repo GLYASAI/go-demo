@@ -24,6 +24,9 @@
 #   go-tests = true
 #   unused-packages = true
 
+[metadata.heroku]
+  root-package = "github.com/goodrain/go-demo"
+  go-version = "go1.11"
 
 [[constraint]]
   name = "github.com/go-sql-driver/mysql"
