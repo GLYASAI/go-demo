@@ -19,9 +19,11 @@
 package http
 
 import (
+	"fmt"
 	"github.com/goodrain/go-demo/foobar"
 	"github.com/goodrain/go-demo/model"
 	"github.com/labstack/echo"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -35,11 +37,23 @@ func NewFoobarHandler(e *echo.Echo, foobarUcase foobar.Usecaser) {
 		foobarUcase: foobarUcase,
 	}
 
-	e.GET("list-env", handler.ListEnv)
+	g := e.Group("/foobar")
+	g.GET("/list-env", handler.ListEnv)
+	g.POST("/greeting", handler.Greeting)
 }
 
 // ListEnv lists all environments
 func (h *foobarHandler) ListEnv(c echo.Context) error {
 	return c.JSON(http.StatusOK, model.NewResponseVO(0, "3000", "", h.foobarUcase.ListEnv()))
+}
 
+// Greeting -
+func (h *foobarHandler) Greeting(c echo.Context) error {
+	g := model.Greeting{}
+	if err := c.Bind(g); err != nil {
+		logrus.Errorf("error binding the request body into provided type `model.Greeting`: %v", err)
+		return c.JSON(http.StatusInternalServerError, model.NewResponseVO(1, "4001",
+			fmt.Sprintf("error binding the request body into provided type `model.Greeting`: %v", err), nil))
+	}
+	return c.JSON(http.StatusOK, model.NewResponseVO(0, "4000", "", g.Name))
 }
