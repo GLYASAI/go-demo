@@ -7,8 +7,10 @@ import (
 	dbinfo_http "github.com/goodrain/go-demo/dbinfo/delivery/http"
 	dbinfo_repo "github.com/goodrain/go-demo/dbinfo/repository"
 	dbinfo_ucase "github.com/goodrain/go-demo/dbinfo/usecase"
+	foobar_http "github.com/goodrain/go-demo/foobar/delivery/http"
+	foobar_ucase "github.com/goodrain/go-demo/foobar/usecase"
 	"github.com/goodrain/go-demo/middleware"
-	"github.com/goodrain/go-demo/proxy/delivery/handler"
+	proxy_http "github.com/goodrain/go-demo/proxy/delivery/http"
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
 	"net/url"
@@ -46,7 +48,11 @@ func main() {
 
 	dbinfoUcaser := dbinfo_ucase.NewDBInfoUsecase(dbinfoRepo)
 	dbinfo_http.NewDBInfoHTTPHandler(e, dbinfoUcaser)
-	handler.NewProxyHandler(e,nil)
+
+	foobarUcaser := foobar_ucase.NewFoobarUsecase()
+	foobar_http.NewFoobarHandler(e, foobarUcaser)
+
+	proxy_http.NewProxyHandler(e, nil)
 
 	e.Logger.Fatal(e.Start(":5000"))
 }
